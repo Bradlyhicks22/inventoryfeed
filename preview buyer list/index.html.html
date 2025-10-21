@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Iron Ape Inventory Catalog</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .fade-in { animation: fadeIn 0.4s ease-in-out; }
+    @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+  <!-- HEADER -->
+  <header class="bg-white shadow-sm sticky top-0 z-10">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <h1 class="text-2xl font-bold text-gray-800">Iron Ape Inventory</h1>
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        <input id="search" type="text" placeholder="Search by make, model, or keyword"
+          class="flex-grow sm:flex-none px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+        <select id="filter" class="px-3 py-2 border border-gray-300 rounded-xl text-sm">
+          <option value="">All Categories</option>
+          <option value="Jet Ski">Jet Skis</option>
+          <option value="Auto Part">Auto Parts</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="max-w-6xl mx-auto p-6">
+    <div id="inventory" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+    <p id="empty" class="hidden text-center text-gray-400 mt-10">No results found.</p>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="text-center text-gray-400 text-sm py-6">
+    Powered by <a href="https://prairiewebworks.com" class="text-blue-500 font-semibold hover:underline">Prairie Webworks</a>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+  async function loadInventory() {
+    const csvUrl = "inventory.csv"; // Replace with Google Sheets CSV link if desired
+    const res = await fetch(csvUrl);
+    const text = await res.text();
+    const rows = text.trim().split("\n").slice(1);
+    const data = rows.map(r => {
+      const cols = r.split(",");
+      return {
+        id: cols[0],
+        category: cols[1],
+        make: cols[2],
+        model: cols[3],
+        year: cols[4],
+        condition: cols[5],
+        price: cols[6],
+        notes: cols[7],
+        photo: cols[8],
+      };
+    });
+    renderInventory(data);
+  }
+
+  function renderInventory(data) {
+    const container = document.getElementById("inventory");
+    container.innerHTML = "";
+    const search = document.getElementById("search").value.toLowerCase();
+    const filter = document.getElementById("filter").value;
+
+    const filtered = data.filter(item => {
+      const matchSearch = [item.make, item.model, item.notes].some(f => f && f.toLowerCase().includes(search));
+      const matchFilter = !filter || item.category === filter;
+      return matchSearch && matchFilter;
+    });
+
+    if (filtered.length === 0) {
+      document.getElementById("empty").classList.remove("hidden");
+      return;
+    } else {
+      document.getElementById("empty").classList.add("hidden");
+    }
+
+    filtered.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "fade-in bg-white rounded-2xl shadow hover:shadow-lg transition p-4 flex flex-col";
+      card.innerHTML = `
+        <img src="${item.photo || 'https://placehold.co/600x400?text=No+Image'}"
+          alt="${item.make} ${item.model}" class="rounded-xl h-48 w-full object-cover mb-3">
+        <h2 class="text-xl font-semibold">${item.make} ${item.model || ""}</h2>
+        <p class="text-sm text-gray-500">${item.year || ""} • ${item.condition || ""}</p>
+        <p class="text-lg font-bold mt-2 text-gray-800">$${item.price || "—"}</p>
+        <p class="text-sm mt-1 text-gray-600 flex-grow">${item.notes || ""}</p>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  document.getElementById("search").addEventListener("input", () => loadInventory());
+  document.getElementById("filter").addEventListener("change", () => loadInventory());
+  loadInventory();
+  </script>
+</body>
+</html>

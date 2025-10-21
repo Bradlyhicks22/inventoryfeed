@@ -1,0 +1,6 @@
+ID,Category,Make,Model,Year,Condition,Price,Notes,Photo
+JSK-0001,Jet Ski,Yamaha,VX110 Deluxe,2008,Complete / Non-running,1200,Turns over; clean hull; no spark,https://images.unsplash.com/photo-1562690868-60bbe7293e94?auto=format&fit=crop&w=600&q=60
+JSK-0002,Jet Ski,Sea-Doo,GTI 130,2009,Running / Titled,2850,Fires up instantly; includes trailer,https://images.unsplash.com/photo-1515777315835-281b94c9589e?auto=format&fit=crop&w=600&q=60
+JSK-0003,Jet Ski,Kawasaki,STX-15F,2006,For Parts / No Title,650,Engine locked; solid hull; good electronics,https://images.unsplash.com/photo-1601924582971-64de65d6f64f?auto=format&fit=crop&w=600&q=60
+PRT-0001,Auto Part,Ford,F-150 Rear Axle 3.55,2010,Used / Good,550,3.55 ratio confirmed; no ABS tone ring,https://images.unsplash.com/photo-1609443027160-b206b71d4320?auto=format&fit=crop&w=600&q=60
+PRT-0002,Auto Part,Chevy,Silverado ECM,2014,Tested / OEM,180,OEM ECM pulled and tested; ready to ship,https://images.unsplash.com/photo-1607082349566-b68814a90f3e?auto=format&fit=crop&w=600&q=60
